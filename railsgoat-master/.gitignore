@@ -1,0 +1,13 @@
+/.bundle
+/bin
+/db/*.sqlite3
+/log/*.log
+/tmp
+.elasticbeanstalk/
+.DS_Store
+/public/data
+*.png
+coverage
+.tags
+/.vagrant
+/vendor/ruby
