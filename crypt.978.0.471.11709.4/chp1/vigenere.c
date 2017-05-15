@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-
 // Usage: crypto key input_file output_file
 
 void main (int argc, char *argv[])
