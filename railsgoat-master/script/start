@@ -1,5 +1,0 @@
-#!/bin/bash
-set -e
-
-rake db:setup
-rails server
