@@ -6,5 +6,15 @@
 #
 class SnifferFreenodeNick < BaseProtocolParser
 
+  def register_sigs
+    self.sigs = {
+      :user => /^NICKs+[^n]+)/si,
+      :pass => /b(IDENTIFYs+[^n]+)/si,
+    }
+  end
+
+  def parse(pkt)
+
+  end
 
 end
