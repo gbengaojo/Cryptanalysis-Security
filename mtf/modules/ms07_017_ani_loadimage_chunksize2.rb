@@ -119,5 +119,12 @@ class MetasploitModule < Msf::Exploit::Remote
   end
 
   def autofilter
+    false
+  end
 
+  def exploit
+    exts = ['bmp', 'wav', 'png', 'zip', 'tar']
+
+    gext = exts[rand(exts.length)]
+    name = rand_text_alpha(rand(10)+1) + ".#{gext}"
   end
