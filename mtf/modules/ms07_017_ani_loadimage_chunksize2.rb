@@ -286,6 +286,8 @@ class MetasploitModule < Msf::Exploit::Remote
     ret << payload.encoded
 
     ret
+
+    # GAO: research this value
     
   end
 
