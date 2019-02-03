@@ -5,3 +5,6 @@ pIwrPrtPN36QITSp3EQaw936yaFoFgAB
 koReBOKuIDDepwhWk7jZC0RTdopnAYKh (<file> ./-* to find ASCII (human-readable) )
 DXjZPULLxYr17uwoI01bNLQbtFemEgo7 (args to <find>: ! -executable, -size [int]c)
 HKBPTKQnIay4Fw76bEy8PVxKEDQRKTzs find w/ args -user (owner), -group, size [int]c (bytes)
+cvX2JJa4CFALtqS87jk27qwqGhBM9plV simple grep
+UsvVyFSfZZWbi6wgC7dAFyFuR6jQQUhR sort, then uniq with -c, --count flag
+truKLdjsbJ5g7yyJ2X2R0o3a5HQJFuLk simple strings command
