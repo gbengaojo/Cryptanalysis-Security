@@ -11,4 +11,4 @@ truKLdjsbJ5g7yyJ2X2R0o3a5HQJFuLk simple strings command
 IFukwKGsFW8MOq3IRFqrxE1hxTNEbUPR simple base64 --decode
 5Te8Y4drgCRfCx8ugdwuEX8KFC6k2EUu cat datafile pipe into tr [A-Za-z] [N-An-a]
 8ZjyCRiBWFYkneahHwxCv3wb2a1ORpYL file to determine compression alg, decompress; repeat
-4wcYUJFw0k0XLShlDzztnTBHiqxU3b3e this one was totally stupid; instead of ssh -i <keyfile> banidt14@bandit.labs.overthewire.org, it's ssh -i <keyfile> bandit14@localhost. Got everything except the localhost (this machine). Ugh.
+4wcYUJFw0k0XLShlDzztnTBHiqxU3b3e this one was totally stupid; instead of ssh -i <keyfile> banidt14@bandit.labs.overthewire.org, it's ssh -i <keyfile> bandit14@localhost. Got everything except the localhost (this machine). Ugh.; Update (next day); the -i flag works fine if the private key is used. If the public key (freshly derived from the private key using ssh-keygen -y...) is used, the passphrase is asked (which I don't know) 3 times, then the password (which was obtained from /etc/bandit_pass/bandit14, per instructions), then login is successful. The generation of a new public key is not needed for level 13 -> 14.
